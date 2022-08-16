@@ -19,7 +19,12 @@ public class Main {
         SuggestionEngine suggestionEngine = new SuggestionEngine();
 
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9093,localhost:9094");
+
+        // Because now we make use of the broker deployed on a docker container
+        // taken from the docker-compose.yml of
+        // https://github.com/confluentinc/cp-all-in-one/tree/7.2.1-post/cp-all-in-one-community
+        // props.put("bootstrap.servers", "localhost:9093,localhost:9094");
+        props.put("bootstrap.servers", "localhost:9092");
         props.put("group.id", TOPIC + "-consumer");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
