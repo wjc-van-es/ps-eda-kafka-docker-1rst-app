@@ -1,0 +1,326 @@
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app$ cd docker/
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose up -d
+[+] Running 3/3
+ ⠿ Network docker_default  Created                                                                                                                                                                                                 0.0s
+ ⠿ Container zookeeper     Started                                                                                                                                                                                                 0.7s
+ ⠿ Container broker        Started                                                                                                                                                                                                 0.9s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose ps
+  Name               Command            State                                                                Ports
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+broker      /etc/confluent/docker/run   Up      0.0.0.0:29092->29092/tcp,:::29092->29092/tcp, 0.0.0.0:9092->9092/tcp,:::9092->9092/tcp, 0.0.0.0:9101->9101/tcp,:::9101->9101/tcp
+zookeeper   /etc/confluent/docker/run   Up      0.0.0.0:2181->2181/tcp,:::2181->2181/tcp, 2888/tcp, 3888/tcp
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker ps -a
+CONTAINER ID   IMAGE                             COMMAND                  CREATED         STATUS              PORTS                                                                                                                                 NAMES
+0326106ee4d7   confluentinc/cp-kafka:7.2.1       "/etc/confluent/dock…"   2 minutes ago   Up About a minute   0.0.0.0:9092->9092/tcp, :::9092->9092/tcp, 0.0.0.0:9101->9101/tcp, :::9101->9101/tcp, 0.0.0.0:29092->29092/tcp, :::29092->29092/tcp   broker
+598932b2afc9   confluentinc/cp-zookeeper:7.2.1   "/etc/confluent/dock…"   2 minutes ago   Up About a minute   2888/tcp, 0.0.0.0:2181->2181/tcp, :::2181->2181/tcp, 3888/tcp                                                                         zookeeper
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker network ls
+NETWORK ID     NAME             DRIVER    SCOPE
+65594cc441ef   bridge           bridge    local
+edfd1644149a   docker_default   bridge    local
+fb9f07672f4c   host             host      local
+f22bbd812450   none             null      local
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker network inspect docker_default
+[
+    {
+        "Name": "docker_default",
+        "Id": "edfd1644149af272798f0b9fd4a2dcf093e0f8bb136cc1373841f74014505cb1",
+        "Created": "2022-08-16T21:03:08.751633369+02:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "0326106ee4d7b81285c1f5e1ff97eeead87c22720a6f5d9c809f9d0cc4bcd0d4": {
+                "Name": "broker",
+                "EndpointID": "d1d69d5a4a5497141d4752c17cdfe0688a0ff6ccbb5131c0f2b29882cd8e4268",
+                "MacAddress": "02:42:ac:12:00:03",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            },
+            "598932b2afc91a1143cf1643a6b7c7ed34443d6afb2574d4ab9c5c698dd0768b": {
+                "Name": "zookeeper",
+                "EndpointID": "8c627a1405829ecf2424d404a145602bacb0517714a686314ea6697bae451f3f",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {
+            "com.docker.compose.network": "default",
+            "com.docker.compose.project": "docker",
+            "com.docker.compose.version": "2.6.0"
+        }
+    }
+]
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker images
+REPOSITORY                        TAG           IMAGE ID       CREATED        SIZE
+confluentinc/ksqldb-examples      7.2.1         ae252c2780c4   4 weeks ago    815MB
+confluentinc/cp-ksqldb-server     7.2.1         140d2ac32177   4 weeks ago    1.36GB
+confluentinc/cp-ksqldb-cli        7.2.1         287039530a46   4 weeks ago    857MB
+confluentinc/cp-schema-registry   7.2.1         afaac043dcc1   4 weeks ago    1.86GB
+confluentinc/cp-kafka             7.2.1         d893473a6510   4 weeks ago    782MB
+confluentinc/cp-kafka             latest        d893473a6510   4 weeks ago    782MB
+confluentinc/cp-zookeeper         7.2.1         3f28db6a433d   4 weeks ago    782MB
+confluentinc/cp-zookeeper         latest        3f28db6a433d   4 weeks ago    782MB
+confluentinc/cp-kafka-rest        7.2.1         784b8061ad0c   4 weeks ago    1.76GB
+cnfldemos/kafka-connect-datagen   0.5.3-7.1.0   de0e2396b904   4 months ago   1.46GB
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ nc -zv localhost 2181
+Connection to localhost (127.0.0.1) 2181 port [tcp/*] succeeded!
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ nc -zv localhost 9092
+Connection to localhost (127.0.0.1) 9092 port [tcp/*] succeeded!
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ls -la
+total 16
+drwxrwxr-x 2 willem willem 4096 aug 16 21:59 .
+drwxrwxr-x 7 willem willem 4096 aug 16 20:49 ..
+-rw-rw-r-- 1 willem willem 1214 aug 16 21:59 create-topic.sh
+-rw-rw-r-- 1 willem willem 1170 aug 16 20:47 docker-compose.yml
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ chmod +x create-topic.sh
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ls -la
+total 16
+drwxrwxr-x 2 willem willem 4096 aug 16 21:59 .
+drwxrwxr-x 7 willem willem 4096 aug 16 20:49 ..
+-rwxrwxr-x 1 willem willem 1214 aug 16 21:59 create-topic.sh
+-rw-rw-r-- 1 willem willem 1170 aug 16 20:47 docker-compose.yml
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+USER_TRACKING_TOPIC_ABSENT: 0
+user-tracking
+Topic: user-tracking    TopicId: h8DhMs6KS223-Ai_bGGL8g PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+USER_TRACKING_TOPIC_ABSENT: false
+Error while executing topic command : Topic 'user-tracking' already exists.
+[2022-08-16 20:10:34,313] ERROR org.apache.kafka.common.errors.TopicExistsException: Topic 'user-tracking' already exists.
+ (kafka.admin.TopicCommand$)
+Created topic named user-tracking
+user-tracking
+Topic: user-tracking    TopicId: h8DhMs6KS223-Ai_bGGL8g PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+USER_TRACKING_TOPIC_ABSENT: false
+user-tracking
+Topic: user-tracking    TopicId: h8DhMs6KS223-Ai_bGGL8g PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+USER_TRACKING_TOPIC_ABSENT: false
+current list of topics:
+user-tracking
+Description of user-tracking:
+Topic: user-tracking    TopicId: h8DhMs6KS223-Ai_bGGL8g PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+The topic user-tracking has already been created
+USER_TRACKING_TOPIC_ABSENT: false
+current list of topics:
+user-tracking
+Description of the user-tracking topic:
+Topic: user-tracking    TopicId: h8DhMs6KS223-Ai_bGGL8g PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose down
+[+] Running 3/3
+ ⠿ Container broker        Removed                                                                                                                                                                                                 0.9s
+ ⠿ Container zookeeper     Removed                                                                                                                                                                                                 0.6s
+ ⠿ Network docker_default  Removed                                                                                                                                                                                                 0.1s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+local     7ffe9822654501cc18b74261be6811c579efb104661572bf8fa8140b1f2f9ae0
+local     81d57c54ad31f0276c3b4eece62537b4dc29f9bf40cdc4eec040fcf9c548a877
+local     754a64eaffbc4f6b97b505eecd8de35178485b21fae7134458ef532154d2b178
+local     a7ec02d4b9ec58097fc44683044d3e53f419e9ac2b95d302c17abf2ec4555de0
+local     bf90fc68a8350381ea0caffd4160d382b064e19f82ecc4c26912fb63c3003c6f
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume prune
+WARNING! This will remove all local volumes not used by at least one container.
+Are you sure you want to continue? [y/N] y
+Deleted Volumes:
+754a64eaffbc4f6b97b505eecd8de35178485b21fae7134458ef532154d2b178
+7ffe9822654501cc18b74261be6811c579efb104661572bf8fa8140b1f2f9ae0
+bf90fc68a8350381ea0caffd4160d382b064e19f82ecc4c26912fb63c3003c6f
+81d57c54ad31f0276c3b4eece62537b4dc29f9bf40cdc4eec040fcf9c548a877
+a7ec02d4b9ec58097fc44683044d3e53f419e9ac2b95d302c17abf2ec4555de0
+
+Total reclaimed space: 67.11MB
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose up -d
+[+] Running 3/3
+ ⠿ Network docker_default  Created                                                                                                                                                                                                 0.0s
+ ⠿ Container zookeeper     Started                                                                                                                                                                                                 0.6s
+ ⠿ Container broker        Started                                                                                                                                                                                                 0.8s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose ps
+  Name               Command            State                                                                Ports
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+broker      /etc/confluent/docker/run   Up      0.0.0.0:29092->29092/tcp,:::29092->29092/tcp, 0.0.0.0:9092->9092/tcp,:::9092->9092/tcp, 0.0.0.0:9101->9101/tcp,:::9101->9101/tcp
+zookeeper   /etc/confluent/docker/run   Up      0.0.0.0:2181->2181/tcp,:::2181->2181/tcp, 2888/tcp, 3888/tcp
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present:
+The topic user-tracking is still absent
+USER_TRACKING_TOPIC_ABSENT: true
+Created topic user-tracking.
+Created topic named user-tracking
+current list of topics:
+user-tracking
+Description of the user-tracking topic:
+Topic: user-tracking    TopicId: r-2hMdHXSBOHazwlbjT3cw PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose down
+[+] Running 3/3
+ ⠿ Container broker        Removed                                                                                                                                                                                                 0.9s
+ ⠿ Container zookeeper     Removed                                                                                                                                                                                                 0.7s
+ ⠿ Network docker_default  Removed                                                                                                                                                                                                 0.2s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+local     12af945b9d954d719046230990138ff24c35e39acdfa81406739e8a1665006e6
+local     87bb757399c04fcd4de492fb0fa317c5a3c31d81d9928b95134550f094024d9f
+local     217aaf5269bb09f5c384fbb37f4af3c46c4600d4ca1a37c697ec9cdaeb3b5d8f
+local     25862273bcf8af2eff519e4df526735baad77df7bdccca9a2a81d1c7a4484f8b
+local     a5d8b5a99966c0f86f007b1f72623c1773068eed6c1a40e6b1729d09c38b0502
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume prune
+WARNING! This will remove all local volumes not used by at least one container.
+Are you sure you want to continue? [y/N] y
+Deleted Volumes:
+12af945b9d954d719046230990138ff24c35e39acdfa81406739e8a1665006e6
+25862273bcf8af2eff519e4df526735baad77df7bdccca9a2a81d1c7a4484f8b
+a5d8b5a99966c0f86f007b1f72623c1773068eed6c1a40e6b1729d09c38b0502
+217aaf5269bb09f5c384fbb37f4af3c46c4600d4ca1a37c697ec9cdaeb3b5d8f
+87bb757399c04fcd4de492fb0fa317c5a3c31d81d9928b95134550f094024d9f
+
+Total reclaimed space: 67.11MB
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose up -d
+[+] Running 3/3
+ ⠿ Network docker_default  Created                                                                                                                                                                                                 0.0s
+ ⠿ Container zookeeper     Started                                                                                                                                                                                                 0.7s
+ ⠿ Container broker        Started                                                                                                                                                                                                 0.9s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose ps
+  Name               Command            State                                                                Ports
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+broker      /etc/confluent/docker/run   Up      0.0.0.0:29092->29092/tcp,:::29092->29092/tcp, 0.0.0.0:9092->9092/tcp,:::9092->9092/tcp, 0.0.0.0:9101->9101/tcp,:::9101->9101/tcp
+zookeeper   /etc/confluent/docker/run   Up      0.0.0.0:2181->2181/tcp,:::2181->2181/tcp, 2888/tcp, 3888/tcp
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present:
+The topic user-tracking is still absent
+Created topic user-tracking.
+current list of topics:
+user-tracking
+Description of the user-tracking topic:
+Topic: user-tracking    TopicId: kICxyMJaQK2MrazD62FUAg PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+The topic user-tracking has already been created
+current list of topics:
+user-tracking
+Description of the user-tracking topic:
+Topic: user-tracking    TopicId: kICxyMJaQK2MrazD62FUAg PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present
+List of all topics already present: user-tracking
+The topic user-tracking has already been created
+current list of topics:
+user-tracking
+Description of the user-tracking topic:
+Topic: user-tracking    TopicId: kICxyMJaQK2MrazD62FUAg PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose down
+[+] Running 3/3
+ ⠿ Container broker        Removed                                                                                                                                                                                                 1.4s
+ ⠿ Container zookeeper     Removed                                                                                                                                                                                                 0.7s
+ ⠿ Network docker_default  Removed                                                                                                                                                                                                 0.1s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose ps
+Name   Command   State   Ports
+------------------------------
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+local     4b659b5c4b4f4b24f1ac77d5a0950d16e3d5288258e648b561b9b8dbe60b03d4
+local     1031e02d087d09ee8dd90be3411bcbbc8841a1effcc24b84835a9164f9705cc6
+local     c2caf141e1e4f6455d7a264258f6eda7ae7081b46f5d7cacf4a8f0727253d757
+local     db177ca4111a5127f1d4d2f86a8b58e0cdabc561c234b3471e1a52d72bbce9f8
+local     fbb66ea7f828604aad810b436c1b1aa221dff8bdc125e954bd8114dc73ca69b5
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume prune
+WARNING! This will remove all local volumes not used by at least one container.
+Are you sure you want to continue? [y/N] y
+Deleted Volumes:
+1031e02d087d09ee8dd90be3411bcbbc8841a1effcc24b84835a9164f9705cc6
+c2caf141e1e4f6455d7a264258f6eda7ae7081b46f5d7cacf4a8f0727253d757
+fbb66ea7f828604aad810b436c1b1aa221dff8bdc125e954bd8114dc73ca69b5
+db177ca4111a5127f1d4d2f86a8b58e0cdabc561c234b3471e1a52d72bbce9f8
+4b659b5c4b4f4b24f1ac77d5a0950d16e3d5288258e648b561b9b8dbe60b03d4
+
+Total reclaimed space: 67.13MB
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker compose up -d
+[+] Running 3/3
+ ⠿ Network docker_default  Created                                                                                                                                                                                                 0.0s
+ ⠿ Container zookeeper     Started                                                                                                                                                                                                 0.6s
+ ⠿ Container broker        Started                                                                                                                                                                                                 0.8s
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ ./create-topic.sh
+Trying to create the topic user-tracking if not yet present.
+List of all topics already present:
+The topic user-tracking is still absent.
+Created topic user-tracking.
+current list of topics:
+user-tracking
+Description of the user-tracking topic:
+Topic: user-tracking    TopicId: 7KFtshsPTNS04gE5rnuzWQ PartitionCount: 1       ReplicationFactor: 1    Configs:
+        Topic: user-tracking    Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose ps
+  Name               Command            State                                                                Ports
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+broker      /etc/confluent/docker/run   Up      0.0.0.0:29092->29092/tcp,:::29092->29092/tcp, 0.0.0.0:9092->9092/tcp,:::9092->9092/tcp, 0.0.0.0:9101->9101/tcp,:::9101->9101/tcp
+zookeeper   /etc/confluent/docker/run   Up      0.0.0.0:2181->2181/tcp,:::2181->2181/tcp, 2888/tcp, 3888/tcp
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose down
+Stopping broker    ... done
+Stopping zookeeper ... done
+Removing broker    ... done
+Removing zookeeper ... done
+Removing network docker_default
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker-compose ps
+Name   Command   State   Ports
+------------------------------
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume prune
+WARNING! This will remove all local volumes not used by at least one container.
+Are you sure you want to continue? [y/N] y
+Deleted Volumes:
+3f2288c31b497d5e48d82d77d1b29e17b960e70e2aaa0867b080e8b2fcea4772
+0d41fabbdc93897e3881822c4047ef096c8e1d839a350356ced6561e4d9a7eae
+94be84b96771fe77813e63df23f00751a98b6bc3480c1c04a02d7f1615fccd11
+66097ac7fd693dced32279c62bda636582be145ad1f1bc50fd2b18650e2d97b1
+5a46f3c54ad93a049219ae12eee97f30b4ef709251b595c3fdaefd3492af5e08
+
+Total reclaimed space: 67.12MB
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$ docker volume ls
+DRIVER    VOLUME NAME
+willem@linux-laptop:~/git/ps-eda-kafka-docker-1rst-app/docker$
+
