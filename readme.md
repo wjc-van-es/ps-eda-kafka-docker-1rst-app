@@ -12,7 +12,7 @@ I enjoyed this course very much and I would recommend it to anyone who needs an 
 to use Apache Kafka software to implement it.
 
 ## Purpose
-In the course the example was presented running with locally installed kafka, zookeeper & the Confluent schema-registry software components.
+In the course the example was presented running with locally installed kafka and zookeeper software components.
 This requires some work, which may be instructive if you want to learn about some basic principles of Kafka and how to configure it.
 However, it is much more convenient to run all necessary software components in separate docker containers. Especially when you are
 already familiar with Docker and Docker Compose technology.
@@ -48,6 +48,12 @@ So, under the hood, we are using Docker images, made available by Confluent (for
 
 ## Changes made to the original example source code.
 I made an effort to update all maven dependencies to the versions available now (August 2022).
+
+## Prerequisites
+- A JDK should be installed version 8 is the minimal requirement, but I tested this example with version 17.
+- Maven, I tested the example with version 3.8.1
+- Docker (including Docker Compose, the docker-compose-plugin is the most recent version v2.6.0, where the commands
+  start with `docker compose` rather than `docker-compose`. The latter is a deprecated older version 1.29.2)
 
 ## Usage
 - Open a terminal in the project/repository root dir
